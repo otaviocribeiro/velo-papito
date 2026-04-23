@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test'
 
 import { generateOrderCode } from '../support/helpers'
+//import { searchOrder } from '../support/helpers'
+import { OrderLookupPage } from '../support/pages/OrderLookupPage'
 
 /// AAA - Arrange, Act, Assert
 
@@ -18,21 +20,34 @@ test.describe('Consulta de Pedido', () => {
   test('deve consultar um pedido aprovado', async ({ page }) => {
 
     // Test Data
+    // const order = {
+    //   number: 'VLO-6E2J20',
+    //   status: 'APROVADO',
+    //   color: 'Lunar White',
+    //   wheels: 'aero Wheels',
+    //   customer: {
+    //     name: 'Fernando Papito',
+    //     email: 'papito@velo.dev'
+    //   },
+    //   payment: 'À Vista'
+    // }
     const order = {
-      number: 'VLO-6E2J20',
+      number: 'VLO-T0PGRW',
       status: 'APROVADO',
       color: 'Lunar White',
-      wheels: 'aero Wheels',
+      wheels: 'sport Wheels',
       customer: {
-        name: 'Fernando Papito',
-        email: 'papito@velo.dev'
+          name: 'Otávio Ribeiro',
+          email: 'otavio@ribeiro.com',
       },
       payment: 'À Vista'
-    }
+  };
 
-    // Act  
-    await page.getByRole('textbox', { name: 'Número do Pedido' }).fill(order.number)
-    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+    // Act 
+    //await searchOrder(page, order.number);
+    const orderLookupPage = new OrderLookupPage(page);
+
+    await orderLookupPage.searchOrder(order.number);
 
     // Assert
     await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
@@ -78,21 +93,33 @@ test.describe('Consulta de Pedido', () => {
   test('deve consultar um pedido reprovado', async ({ page }) => {
 
     // Test Data
+    // const order = {
+    //   number: 'VLO-0LNFEA',
+    //   status: 'REPROVADO',
+    //   color: 'Midnight Black',
+    //   wheels: 'sport Wheels',
+    //   customer: {
+    //     name: 'Steve Jobs',
+    //     email: 'jobs@apple.com'
+    //   },
+    //   payment: 'À Vista'
+    // }
     const order = {
-      number: 'VLO-0LNFEA',
+      number: 'VLO-IB9SNF',
       status: 'REPROVADO',
       color: 'Midnight Black',
       wheels: 'sport Wheels',
       customer: {
-        name: 'Steve Jobs',
-        email: 'jobs@apple.com'
+          name: 'Georgia Schmitz',
+          email: 'georgiamschmitz@gmail.com',
       },
       payment: 'À Vista'
-    }
+  };
 
     // Act  
-    await page.getByRole('textbox', { name: 'Número do Pedido' }).fill(order.number)
-    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+    const orderLookupPage = new OrderLookupPage(page);
+
+    await orderLookupPage.searchOrder(order.number);
 
     // Assert
     await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
@@ -137,21 +164,33 @@ test.describe('Consulta de Pedido', () => {
   test('deve consultar um pedido em analise', async ({ page }) => {
 
     // Test Data
+    // const order = {
+    //   number: 'VLO-412O06',
+    //   status: 'EM_ANALISE',
+    //   color: 'Lunar White',
+    //   wheels: 'aero Wheels',
+    //   customer: {
+    //     name: 'João da Silva',
+    //     email: 'joao@velo.dev'
+    //   },
+    //   payment: 'À Vista'
+    // }
     const order = {
-      number: 'VLO-412O06',
+      number: 'VLO-U3ZMEP',
       status: 'EM_ANALISE',
-      color: 'Lunar White',
+      color: 'Glacier Blue',
       wheels: 'aero Wheels',
       customer: {
-        name: 'João da Silva',
-        email: 'joao@velo.dev'
+          name: 'Orianos Efice',
+          email: 'orianos@fc.com',
       },
       payment: 'À Vista'
-    }
+  };
 
     // Act  
-    await page.getByRole('textbox', { name: 'Número do Pedido' }).fill(order.number)
-    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+    const orderLookupPage = new OrderLookupPage(page);
+
+    await orderLookupPage.searchOrder(order.number);
 
     // Assert
     await expect(page.getByTestId(`order-result-${order.number}`)).toMatchAriaSnapshot(`
@@ -197,8 +236,9 @@ test.describe('Consulta de Pedido', () => {
 
     const order = generateOrderCode()
 
-    await page.getByRole('textbox', { name: 'Número do Pedido' }).fill(order)
-    await page.getByRole('button', { name: 'Buscar Pedido' }).click()
+    const orderLookupPage = new OrderLookupPage(page);
+
+    await orderLookupPage.searchOrder(order);
 
 
     await expect(page.locator('#root')).toMatchAriaSnapshot(`
